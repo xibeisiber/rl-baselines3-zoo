@@ -44,7 +44,7 @@ CartPole-v1:
 
 MountainCar-v0:
   normalize: true
-  n_envs: 16
+  n_envs: 4
   n_timesteps: !!float 1e6
   policy: 'MlpPolicy'
   n_steps: 16
@@ -544,3 +544,27 @@ Walker2d-v3:
   gae_lambda: 0.95
   max_grad_norm: 1
   vf_coef: 0.871923
+
+
+BounceBallPyBullet-v0:
+  normalize: true
+  n_envs: 5
+  policy: 'MlpPolicy'
+  n_timesteps: !!float 1e7
+  batch_size: 128
+  n_steps: 1024
+  gamma: 0.98
+  learning_rate: 1.808413251388829e-06
+  ent_coef:  5.372129668263054e-07
+  clip_range: 0.2
+  n_epochs: 20
+  gae_lambda: 0.92
+  max_grad_norm: 0.3
+  vf_coef: 0.5104318183637625
+  sde_sample_freq: 128
+  policy_kwargs: "dict(
+                    log_std_init=-0.5598334153776301,
+                    ortho_init=False,
+                    activation_fn=nn.ReLU,
+                    net_arch=[dict(pi=[256, 256], vf=[256, 256])]
+                  )"

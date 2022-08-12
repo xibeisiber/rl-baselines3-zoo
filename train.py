@@ -16,6 +16,8 @@ import utils.import_envs  # noqa: F401 pytype: disable=import-error
 from utils.exp_manager import ExperimentManager
 from utils.utils import ALGOS, StoreDict
 
+import rl_sim
+
 seaborn.set()
 
 if __name__ == "__main__":  # noqa: C901

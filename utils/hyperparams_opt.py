@@ -15,13 +15,13 @@ def sample_ppo_params(trial: optuna.Trial) -> Dict[str, Any]:
     :param trial:
     :return:
     """
-    batch_size = trial.suggest_categorical("batch_size", [8, 16, 32, 64, 128, 256, 512])
+    batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_loguniform("learning_rate", 1e-5, 1)
-    lr_schedule = "constant"
+    learning_rate = trial.suggest_loguniform("learning_rate", 1e-7, 5e-4)
+    # lr_schedule = "constant"
     # Uncomment to enable learning rate schedule
-    # lr_schedule = trial.suggest_categorical('lr_schedule', ['linear', 'constant'])
+    lr_schedule = trial.suggest_categorical('lr_schedule', ['linear', 'constant'])
     ent_coef = trial.suggest_loguniform("ent_coef", 0.00000001, 0.1)
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])
     n_epochs = trial.suggest_categorical("n_epochs", [1, 5, 10, 20])
@@ -30,9 +30,9 @@ def sample_ppo_params(trial: optuna.Trial) -> Dict[str, Any]:
     vf_coef = trial.suggest_uniform("vf_coef", 0, 1)
     net_arch = trial.suggest_categorical("net_arch", ["small", "medium"])
     # Uncomment for gSDE (continuous actions)
-    # log_std_init = trial.suggest_uniform("log_std_init", -4, 1)
+    log_std_init = trial.suggest_uniform("log_std_init", -4, 1)
     # Uncomment for gSDE (continuous action)
-    # sde_sample_freq = trial.suggest_categorical("sde_sample_freq", [-1, 8, 16, 32, 64, 128, 256])
+    sde_sample_freq = trial.suggest_categorical("sde_sample_freq", [-1, 8, 16, 32, 64, 128, 256])
     # Orthogonal initialization
     ortho_init = False
     # ortho_init = trial.suggest_categorical('ortho_init', [False, True])

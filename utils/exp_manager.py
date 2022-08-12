@@ -540,6 +540,7 @@ class ExperimentManager:
 
         # On most env, SubprocVecEnv does not help and is quite memory hungry
         # therefore we use DummyVecEnv by default
+        self.vec_env_class = SubprocVecEnv
         env = make_vec_env(
             env_id=self.env_name.gym_id,
             n_envs=n_envs,
@@ -664,7 +665,7 @@ class ExperimentManager:
         trial_verbosity = 0
         # Activate verbose mode for the trial in debug mode
         # See PR #214
-        if self.verbose >= 2:
+        if self.verbose >= 1:
             trial_verbosity = self.verbose
 
         model = ALGOS[self.algo](

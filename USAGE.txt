@@ -1,0 +1,6 @@
+自动寻找最优超参数
+python train_bb.py --algo ppo --env BounceBallPyBullet-v0 -n 100000 -optimize --n-trials 100 --n-jobs 2 --sampler tpe --pruner median --verbose 0
+
+
+训练
+python train_bb.py --algo ppo --env BounceBallPyBullet-v0 --tensorboard-log ./logs/tensorboard --verbose 1
