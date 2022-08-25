@@ -15,6 +15,7 @@ from utils.exp_manager import ExperimentManager
 from utils.load_from_hub import download_from_hub
 from utils.utils import StoreDict, get_model_path
 
+import rl_sim
 
 def main():  # noqa: C901
     parser = argparse.ArgumentParser()
@@ -197,7 +198,9 @@ def main():  # noqa: C901
     lstm_states = None
     episode_start = np.ones((env.num_envs,), dtype=bool)
     try:
-        for _ in range(args.n_timesteps):
+        done = False
+        while not done:
+        # for _ in range(args.n_timesteps):
             action, lstm_states = model.predict(
                 obs,
                 state=lstm_states,
@@ -223,6 +226,9 @@ def main():  # noqa: C901
                         print(f"Atari Episode Score: {episode_infos['r']:.2f}")
                         print("Atari Episode Length", episode_infos["l"])
 
+                if ep_len%1000==0:
+                    print(f"  current_timestep: {ep_len}, current_cumulative_reward: {episode_reward}")
+                    
                 if done and not is_atari and args.verbose > 0:
                     # NOTE: for env using VecNormalize, the mean reward
                     # is a normalized reward when `--norm_reward` flag is passed

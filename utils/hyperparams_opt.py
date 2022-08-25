@@ -216,9 +216,9 @@ def sample_sac_params(trial: optuna.Trial) -> Dict[str, Any]:
     :return:
     """
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_loguniform("learning_rate", 1e-5, 1)
-    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 128, 256, 512, 1024, 2048])
-    buffer_size = trial.suggest_categorical("buffer_size", [int(1e4), int(1e5), int(1e6)])
+    learning_rate = trial.suggest_loguniform("learning_rate", 1e-7, 5e-4)
+    batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512, 1024, 2048])
+    buffer_size = trial.suggest_categorical("buffer_size", [int(1e5), int(1e6)])
     learning_starts = trial.suggest_categorical("learning_starts", [0, 1000, 10000, 20000])
     # train_freq = trial.suggest_categorical('train_freq', [1, 10, 100, 300])
     train_freq = trial.suggest_categorical("train_freq", [1, 4, 8, 16, 32, 64, 128, 256, 512])
