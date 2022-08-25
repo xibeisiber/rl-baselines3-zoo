@@ -162,7 +162,7 @@ class ExperimentManager:
         self.save_path = os.path.join(
             self.log_path, f"{self.env_name}_{get_latest_run_id(self.log_path, self.env_name) + 1}{uuid_str}"
         )
-        self.tensorboard_log = os.path.join(log_folder, "tensorboard")
+        self.tensorboard_log = os.path.join(self.save_path, self.env_name)
         self.params_path = f"{self.save_path}/{self.env_name}"
 
     def setup_experiment(self) -> Optional[Tuple[BaseAlgorithm, Dict[str, Any]]]:
