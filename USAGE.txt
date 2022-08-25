@@ -8,4 +8,6 @@ python train.py --algo ppo --env BounceBallPyBullet-v0 -n 100000 -optimize --n-t
 python train.py --algo ppo --env BounceBallPyBullet-v0 --verbose 1
 
 
-python enjoy.py --algo ppo --env BounceBallPyBullet-v0 -f logs/ --exp-id 2
+加载训练好的模型
+python enjoy.py --algo ppo --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --env-kwargs gym_render:True
+python enjoy.py --algo ppo --env env_id -f logs/ --exp-id 2 --load-best --env-kwargs gym_render:True

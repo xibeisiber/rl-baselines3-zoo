@@ -281,17 +281,18 @@ NeckEnvRelative-v2:
 
 
 BounceBallPyBullet-v0:
-  n_envs: 5
-  n_timesteps: !!float 5e5
+  normalize: "{'norm_obs': True, 'norm_reward': False}"
+  n_envs: 25
+  n_timesteps: !!float 2e6
   policy: 'MlpPolicy'
-  learning_rate: !!float 7.3e-4
-  buffer_size: 300000
-  batch_size: 256
+  learning_rate: lin_0.00019381111797675207
+  buffer_size: 100000
+  batch_size: 1024
   ent_coef: 'auto'
-  gamma: 0.98
+  gamma: 0.9
   tau: 0.02
-  train_freq: 64
-  gradient_steps: 64
-  learning_starts: 10000
+  train_freq: 16
+  gradient_steps: 16 #=train_freq
+  learning_starts: 20000
   use_sde: True
-  policy_kwargs: "dict(log_std_init=-3, net_arch=[400, 300])"
+  policy_kwargs: "dict(log_std_init=0.25875495967841644, net_arch=[400, 300])"
