@@ -234,6 +234,7 @@ def main():  # noqa: C901
                     # is a normalized reward when `--norm_reward` flag is passed
                     print(f"Episode Reward: {episode_reward:.2f}")
                     print("Episode Length", ep_len)
+                    print(infos)
                     episode_rewards.append(episode_reward)
                     episode_lengths.append(ep_len)
                     episode_reward = 0.0
