@@ -1,13 +1,16 @@
 自动寻找最优超参数
-python train.py --algo sac --env BounceBallPyBullet-v0 -n 100000 -optimize --n-trials 100 --n-jobs 2 --sampler tpe --pruner median --verbose 0
+python train.py --algo ppo --env BounceBallPyBullet-v0 -n 100000 -optimize --n-trials 100 --n-jobs 2 --sampler tpe --pruner median --verbose 0
 
 
 训练
-# python train.py --algo sac --env BounceBallPyBullet-v0 --tensorboard-log ./logs/sac/BounceBallPyBullet-v0_2 --verbose 1
+# python train.py --algo sac --env BounceBallPyBullet-v0 --tensorboard-log ./logs/sac/BounceBallPyBullet-v0_6 --verbose 1
 自动将tensorboad存在训练文件夹中
-python train.py --algo sac --env BounceBallPyBullet-v0 --verbose 1 --eval-episodes 1 --n-eval-envs 1
+python train.py --algo ppo --env BounceBallPyBullet-v0 --verbose 1
 
 
-加载训练好的模型
-python enjoy.py --algo sac --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --env-kwargs gym_render:True
-python enjoy.py --algo sac --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --load-best --env-kwargs gym_render:True
+加载模型评测
+python enjoy.py --algo ppo --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --env-kwargs gym_render:True
+python enjoy.py --algo sac --env BounceBallPyBullet-v0 -f logs/ --exp-id 6 --load-best --env-kwargs gym_render:True
+
+加载旧模型继续训练
+python train.py --algo sac --env BounceBallPyBullet-v0 -i ./logs/sac/BounceBallPyBullet-v0_1/best_model.zip -n 500000 --tensorboard-log ./logs/sac/BounceBallPyBullet-v0_1 --verbose 1
