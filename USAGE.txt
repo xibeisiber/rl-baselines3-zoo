@@ -5,11 +5,11 @@ python train.py --algo ppo --env BounceBallPyBullet-v0 -n 100000 -optimize --n-t
 训练
 # python train.py --algo sac --env BounceBallPyBullet-v0 --tensorboard-log ./logs/sac/BounceBallPyBullet-v0_6 --verbose 1
 自动将tensorboad存在训练文件夹中
-python train.py --algo sac --env BounceBallPyBullet-v0 --verbose 1
+python train.py --algo sac --env BounceBallPyBullet-v0 --verbose 1 --eval-episodes 5 --n-eval-envs 5
 
 
 加载模型评测
-python enjoy.py --algo ppo --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --env-kwargs gym_render:True
+python enjoy.py --algo sac --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --env-kwargs gym_render:True
 python enjoy.py --algo sac --env BounceBallPyBullet-v0 -f logs/ --exp-id 2 --load-best --env-kwargs gym_render:True
 
 加载旧模型继续训练
