@@ -454,6 +454,7 @@ class ExperimentManager:
                 print("Creating test environment")
 
             save_vec_normalize = SaveVecNormalizeCallback(save_freq=1, save_path=self.params_path)
+            print("$$$$$$$$$$$$$$$$$$$$$$$ deterministic_eval: ", self.deterministic_eval)
             eval_callback = EvalCallback(
                 self.create_envs(self.n_eval_envs, eval_env=True),
                 callback_on_new_best=save_vec_normalize,
