@@ -45,7 +45,7 @@ from torch import nn as nn  # noqa: F401
 
 # Register custom envs
 import utils.import_envs  # noqa: F401 pytype: disable=import-error
-from utils.callbacks import SaveVecNormalizeCallback, TrialEvalCallback
+from utils.callbacks import SaveVecNormalizeCallback, TrialEvalCallback, EvalMultiBestCallback
 from utils.hyperparams_opt import HYPERPARAMS_SAMPLER
 from utils.utils import ALGOS, get_callback_list, get_latest_run_id, get_wrapper_class, linear_schedule
 
@@ -67,6 +67,7 @@ class ExperimentManager:
         tensorboard_log: str = "",
         n_timesteps: int = 0,
         eval_freq: int = 10000,
+        save_model_n: int = 5,
         n_eval_episodes: int = 5,
         save_freq: int = -1,
         hyperparams: Optional[Dict[str, Any]] = None,
@@ -121,6 +122,7 @@ class ExperimentManager:
         self.callbacks = []
         self.save_freq = save_freq
         self.eval_freq = eval_freq
+        self.save_model_n = save_model_n
         self.n_eval_episodes = n_eval_episodes
         self.n_eval_envs = n_eval_envs
 
@@ -455,7 +457,7 @@ class ExperimentManager:
 
             save_vec_normalize = SaveVecNormalizeCallback(save_freq=1, save_path=self.params_path)
             print("$$$$$$$$$$$$$$$$$$$$$$$ deterministic_eval: ", self.deterministic_eval)
-            eval_callback = EvalCallback(
+            eval_callback = EvalMultiBestCallback(
                 self.create_envs(self.n_eval_envs, eval_env=True),
                 callback_on_new_best=save_vec_normalize,
                 best_model_save_path=self.save_path,
@@ -463,6 +465,7 @@ class ExperimentManager:
                 log_path=self.save_path,
                 eval_freq=self.eval_freq,
                 deterministic=self.deterministic_eval,
+                save_model_n=self.save_model_n,
             )
 
             self.callbacks.append(eval_callback)

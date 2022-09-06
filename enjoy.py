@@ -36,6 +36,9 @@ def main():  # noqa: C901
         "--load-best", action="store_true", default=False, help="Load best model instead of last model if available"
     )
     parser.add_argument(
+        "--best-n", type=int, default=0, help="id of the best model"
+    )
+    parser.add_argument(
         "--load-checkpoint",
         type=int,
         help="Load checkpoint instead of last model if available, "
@@ -86,6 +89,7 @@ def main():  # noqa: C901
             args.load_best,
             args.load_checkpoint,
             args.load_last_checkpoint,
+            args.best_n,
         )
     except (AssertionError, ValueError) as e:
         # Special case for rl-trained agents
@@ -113,6 +117,7 @@ def main():  # noqa: C901
                 args.load_best,
                 args.load_checkpoint,
                 args.load_last_checkpoint,
+                args.best_n,
             )
 
     print(f"Loading {model_path}")
