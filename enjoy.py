@@ -51,7 +51,7 @@ def main():  # noqa: C901
     parser.add_argument(
         "--norm-reward", action="store_true", default=False, help="Normalize reward if applicable (trained with VecNormalize)"
     )
-    parser.add_argument("--seed", help="Random generator seed", type=int, default=0)
+    parser.add_argument("--seed", help="Random generator seed", type=int, default=-1)
     parser.add_argument("--reward-log", help="Where to log reward", default="", type=str)
     parser.add_argument(
         "--gym-packages",
@@ -123,6 +123,10 @@ def main():  # noqa: C901
     if algo in off_policy_algos:
         args.n_envs = 1
 
+    if args.seed < 0:
+        # Seed but with a random one
+        args.seed = np.random.randint(2**32 - 1, dtype="int64").item()
+        
     set_random_seed(args.seed)
 
     if args.num_threads > 0:
