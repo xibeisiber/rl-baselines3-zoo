@@ -7,6 +7,7 @@ from threading import Thread
 from typing import Any, Callable, Dict, List, Optional, Union
 import gym
 import numpy as np
+import datetime
 
 import optuna
 from sb3_contrib import TQC
@@ -286,9 +287,10 @@ class EvalMultiBestCallback(EventCallback):
         self.n_eval_episodes = n_eval_episodes
         self.eval_freq = eval_freq
         self.save_model_n = save_model_n
-        self.best_mean_reward_arr = np.zeros([self.save_model_n, 2])
+        self.best_mean_reward_arr = np.zeros([self.save_model_n, 3])
         self.best_mean_reward_arr[:,0] = np.array(range(self.save_model_n))
         self.best_mean_reward_arr[:,1] = np.array([-np.inf]*self.save_model_n)
+        self.best_mean_reward_arr[:,2] = np.array([-1]*self.save_model_n)
         self.deterministic = deterministic
         self.render = render
         self.warn = warn
@@ -417,9 +419,13 @@ class EvalMultiBestCallback(EventCallback):
                 if self.verbose > 0:
                     print("New best mean reward!")
                 self.best_mean_reward_arr[saved_minreward_id, 1] = mean_reward
+                self.best_mean_reward_arr[saved_minreward_id, 2] = float(datetime.datetime.now().strftime("%Y%m%d.%H%M%S"))
                 if self.best_model_save_path is not None:
-                    self.model.save(os.path.join(self.best_model_save_path, "best_model%d"%(saved_minreward_id)))
-                    np.savetxt(os.path.join(self.best_model_save_path, "best_model_rewards.txt"), self.best_mean_reward_arr, fmt="%d  %.4f")
+                    if saved_minreward_id==0:
+                        self.model.save(os.path.join(self.best_model_save_path, "best_model"))
+                    else:
+                        self.model.save(os.path.join(self.best_model_save_path, "best_model%d"%(saved_minreward_id)))
+                    np.savetxt(os.path.join(self.best_model_save_path, "best_model_rewards.txt"), self.best_mean_reward_arr, fmt="%d  %.4f  %.6f")
                 # Trigger callback on new best model, if needed
                 if self.callback_on_new_best is not None:
                     continue_training = self.callback_on_new_best.on_step()

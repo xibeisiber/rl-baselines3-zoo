@@ -440,7 +440,10 @@ def get_model_path(
     model_name = ModelName(algo, env_name)
 
     if load_best:
-        model_path = os.path.join(log_path, "best_model%d.zip"%best_n)
+        if best_n==0:
+            model_path = os.path.join(log_path, "best_model.zip")
+        else:
+            model_path = os.path.join(log_path, "best_model%d.zip"%best_n)
         name_prefix = f"best-model-{model_name}"
     elif load_checkpoint is not None:
         model_path = os.path.join(log_path, f"rl_model_{load_checkpoint}_steps.zip")
