@@ -184,6 +184,7 @@ def create_test_env(
     should_render: bool = True,
     hyperparams: Optional[Dict[str, Any]] = None,
     env_kwargs: Optional[Dict[str, Any]] = None,
+    pkl_id: int = -1,
 ) -> VecEnv:
     """
     Create environment for testing a trained agent
@@ -240,7 +241,13 @@ def create_test_env(
         if hyperparams["normalize"]:
             print("Loading running average")
             print(f"with params: {hyperparams['normalize_kwargs']}")
-            path_ = os.path.join(stats_path, "vecnormalize.pkl")
+            if pkl_id>0:
+                path_ = os.path.join(stats_path, "vecnormalize%d.pkl"%pkl_id)
+            elif pkl_id==0:
+                path_ = os.path.join(stats_path, "vecnormalize.pkl")
+            else:
+                path_ = os.path.join(stats_path, "vecnormalize_last.pkl")
+            print("loading file: %s"%path_)
             if os.path.exists(path_):
                 env = VecNormalize.load(path_, env)
                 # Deactivate training and reward normalization

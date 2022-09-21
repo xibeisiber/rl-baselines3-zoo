@@ -8,6 +8,7 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import gym
 import numpy as np
 import datetime
+import shutil
 
 import optuna
 from sb3_contrib import TQC
@@ -88,7 +89,8 @@ class SaveVecNormalizeCallback(BaseCallback):
             if self.name_prefix is not None:
                 path = os.path.join(self.save_path, f"{self.name_prefix}_{self.num_timesteps}_steps.pkl")
             else:
-                path = os.path.join(self.save_path, "vecnormalize.pkl")
+                path = os.path.join(self.save_path, "vecnormalize_tmp.pkl")
+
             if self.model.get_vec_normalize_env() is not None:
                 self.model.get_vec_normalize_env().save(path)
                 if self.verbose > 1:
@@ -276,6 +278,7 @@ class EvalMultiBestCallback(EventCallback):
         verbose: int = 1,
         warn: bool = True,
         save_model_n: int = 5,
+        params_path: Optional[str] = None,
     ):
         super().__init__(callback_after_eval, verbose=verbose)
 
@@ -294,6 +297,7 @@ class EvalMultiBestCallback(EventCallback):
         self.deterministic = deterministic
         self.render = render
         self.warn = warn
+        self.params_path = params_path
 
         # Convert to VecEnv for consistency
         if not isinstance(eval_env, VecEnv):
@@ -429,6 +433,10 @@ class EvalMultiBestCallback(EventCallback):
                 # Trigger callback on new best model, if needed
                 if self.callback_on_new_best is not None:
                     continue_training = self.callback_on_new_best.on_step()
+                    if saved_minreward_id==0:
+                        shutil.move(os.path.join(self.params_path, "vecnormalize_tmp.pkl"), os.path.join(self.params_path, "vecnormalize.pkl"))
+                    else:
+                        shutil.move(os.path.join(self.params_path, "vecnormalize_tmp.pkl"), os.path.join(self.params_path, "vecnormalize%d.pkl"%saved_minreward_id))
 
             # Trigger callback after every evaluation, if needed
             if self.callback is not None:

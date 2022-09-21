@@ -249,7 +249,7 @@ class ExperimentManager:
 
         if self.normalize:
             # Important: save the running average, for testing the agent we need that normalization
-            model.get_vec_normalize_env().save(os.path.join(self.params_path, "vecnormalize.pkl"))
+            model.get_vec_normalize_env().save(os.path.join(self.params_path, "vecnormalize_last.pkl"))
 
     def _save_config(self, saved_hyperparams: Dict[str, Any]) -> None:
         """
@@ -466,6 +466,7 @@ class ExperimentManager:
                 eval_freq=self.eval_freq,
                 deterministic=self.deterministic_eval,
                 save_model_n=self.save_model_n,
+                params_path=self.params_path,
             )
 
             self.callbacks.append(eval_callback)
@@ -496,8 +497,7 @@ class ExperimentManager:
         """
         # Pretrained model, load normalization
         path_ = os.path.join(os.path.dirname(self.trained_agent), self.env_name)
-        path_ = os.path.join(path_, "vecnormalize.pkl")
-
+        path_ = os.path.join(path_, "vecnormalize_last.pkl")
         if os.path.exists(path_):
             print("Loading saved VecNormalize stats")
             env = VecNormalize.load(path_, env)
