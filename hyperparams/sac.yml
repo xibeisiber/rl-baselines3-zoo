@@ -298,34 +298,34 @@ NeckEnvRelative-v2:
 #   use_sde: True
 #   policy_kwargs: "dict(log_std_init=0.25875495967841644, net_arch=[400, 300])"
 
-BounceBallPyBullet-v0: # sac param id 2
-  ## -optimized on 20220831, for
-  # env params: timelag=8,obs_stack_n=4, act_in_obs_n=1, rw_coeff=(1,1,1.5,0.01,0.01,0.005)
-  # estimated rew is 1327.393654 for 500000 timesteps
-  normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 15
-  n_timesteps: !!float 2e7
-  policy: 'MlpPolicy'
-  ent_coef: 'auto'
-  target_entropy: "auto"
-  gamma: 0.995
-  learning_rate: lin_0.0003860589539985227
-  batch_size: 128
-  buffer_size: 100000
-  learning_starts: 0
-  train_freq: 128
-  gradient_steps: 128
-  tau: 0.08
-  use_sde: True
-  policy_kwargs: "dict(log_std_init=-0.6440624940420746, net_arch=[400, 300])"
+# BounceBallPyBullet-v0: # sac param id 2
+#   ## -optimized on 20220831, for
+#   # env params: timelag=8,obs_stack_n=4, act_in_obs_n=1, rw_coeff=(1,1,1.5,0.01,0.01,0.005)
+#   # estimated rew is 1327.393654 for 500000 timesteps
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 15
+#   n_timesteps: !!float 2e7
+#   policy: 'MlpPolicy'
+#   ent_coef: 'auto'
+#   target_entropy: "auto"
+#   gamma: 0.995
+#   learning_rate: lin_0.0003860589539985227
+#   batch_size: 128
+#   buffer_size: 100000
+#   learning_starts: 0
+#   train_freq: 128
+#   gradient_steps: 128
+#   tau: 0.08
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-0.6440624940420746, net_arch=[400, 300])"
 
 # BounceBallPyBullet-v0: # sac param id 3
 #   ## -optimized on 20220905 by liang
 #   normalize: "{'norm_obs': True, 'norm_reward': False}"
-#   n_envs: 25
+#   n_envs: 15
 #   n_timesteps: !!float 8e7
 #   policy: 'MlpPolicy'
-#   learning_rate: lin_2.437848145138946e-05
+#   learning_rate: lin_9.75139258e-05
 #   buffer_size: 100000
 #   batch_size: 2048
 #   ent_coef: 'auto'
@@ -336,3 +336,41 @@ BounceBallPyBullet-v0: # sac param id 2
 #   learning_starts: 20000
 #   use_sde: True
 #   policy_kwargs: "dict(log_std_init=-3.989052462366569, net_arch=[256, 256])"
+
+BounceBallPyBullet-v0: # sac param id 4
+  ## -optimized on 20220918 by liang
+  #  -optimized under noise of ball obs
+  normalize: "{'norm_obs': True, 'norm_reward': False}"
+  n_envs: 15
+  n_timesteps: !!float 8e7
+  policy: 'MlpPolicy'
+  learning_rate: lin_7.874217964197788e-06
+  buffer_size: 1000000
+  batch_size: 2048
+  ent_coef: 'auto'
+  gamma: 0.95
+  tau: 0.01
+  train_freq: 8
+  gradient_steps: 16
+  learning_starts: 20000
+  use_sde: True
+  policy_kwargs: "dict(log_std_init=-0.732335043668543, net_arch=[256, 256])"
+
+BounceBallPyBulletCam-v0: # 
+  ## cam 
+  normalize: "{'norm_obs': True, 'norm_reward': False}"
+  n_envs: 20
+  n_timesteps: !!float 8e7
+  policy: 'MultiInputPolicy'
+  learning_rate: lin_2.437848145138946e-04
+  buffer_size: 5000
+  batch_size: 2048
+  ent_coef: 'auto'
+  gamma: 0.99
+  tau: 0.01
+  train_freq: 16
+  gradient_steps: 16
+  learning_starts: 20000
+  use_sde: True
+  policy_kwargs: "dict(log_std_init=-3.989052462366569, net_arch=[256, 256])"
+
