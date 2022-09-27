@@ -357,27 +357,46 @@ NeckEnvRelative-v2:
 #   policy_kwargs: "dict(log_std_init=-0.732335043668543, net_arch=[256, 256])"
 
 
-BounceBallPyBullet-v0: # sac param id 5
-  ## -optimized on 20220926 by liang
-  #  -optimized under q-cmd filter
+# BounceBallPyBullet-v0: # sac param id 5
+#   ## -optimized on 20220926 by liang
+#   #  -optimized under q-cmd filter
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 20
+#   n_timesteps: !!float 8e7
+#   policy: 'MlpPolicy'
+#   learning_rate: lin_0.00029793343371013764
+#   buffer_size: 100000
+#   batch_size: 2048
+#   ent_coef: 'auto'
+#   gamma: 0.99
+#   tau: 0.08
+#   train_freq: 16
+#   gradient_steps: 16
+#   learning_starts: 20000
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-1.8896504964617904, net_arch=[256, 256])"
+
+
+
+
+BounceBallPyBullet-v0: # sac param id 6
+  ## -optimized on 20220927 by liang
+  #  -optimized under action filter, new script(20220926)
   normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 20
+  n_envs: 35
   n_timesteps: !!float 8e7
   policy: 'MlpPolicy'
-  learning_rate: lin_0.00029793343371013764
-  buffer_size: 100000
-  batch_size: 2048
+  learning_rate: 0.0002482604414295922
+  buffer_size: 1000000
+  batch_size: 256
   ent_coef: 'auto'
-  gamma: 0.99
-  tau: 0.08
+  gamma: 0.999
+  tau: 0.02
   train_freq: 16
-  gradient_steps: 16
-  learning_starts: 20000
+  gradient_steps: 100
+  learning_starts: 10000
   use_sde: True
-  policy_kwargs: "dict(log_std_init=-1.8896504964617904, net_arch=[256, 256])"
-
-
-
+  policy_kwargs: "dict(log_std_init=0.5525072535637271, net_arch=[512, 512,512],activation_fn=nn.LeakyReLU)"
 
 
 
