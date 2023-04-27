@@ -61,7 +61,8 @@ class PatchedGymTimeLimit(gym.wrappers.TimeLimit):
     """
 
     def step(self, action):
-        observation, reward, terminated, truncated, info = self.env.step(action)
+        observation, reward, terminated, info = self.env.step(action)
+        truncated = False
         self._elapsed_steps += 1
 
         if self._elapsed_steps >= self._max_episode_steps:
@@ -74,7 +75,7 @@ class PatchedGymTimeLimit(gym.wrappers.TimeLimit):
             # truncated may have been set by the env too
             truncated = truncated or episode_truncated
 
-        return observation, reward, terminated, truncated, info
+        return observation, reward, terminated, info
 
 
 # Patch Gym registry (for Pybullet)

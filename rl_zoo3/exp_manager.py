@@ -164,7 +164,7 @@ class ExperimentManager:
 
         # Logging
         self.log_folder = log_folder
-        self.tensorboard_log = None if tensorboard_log == "" else os.path.join(tensorboard_log, self.env_name)
+        # self.tensorboard_log = None if tensorboard_log == "" else os.path.join(tensorboard_log, self.env_name)
         self.verbose = verbose
         self.args = args
         self.log_interval = log_interval
@@ -175,6 +175,7 @@ class ExperimentManager:
         self.save_path = os.path.join(
             self.log_path, f"{self.env_name}_{get_latest_run_id(self.log_path, self.env_name) + 1}{uuid_str}"
         )
+        self.tensorboard_log = os.path.join(self.save_path, self.env_name)
         self.params_path = f"{self.save_path}/{self.env_name}"
 
     def setup_experiment(self) -> Optional[Tuple[BaseAlgorithm, Dict[str, Any]]]:
@@ -193,6 +194,15 @@ class ExperimentManager:
         # Create env to have access to action space for action noise
         n_envs = 1 if self.algo == "ars" or self.optimize_hyperparameters else self.n_envs
         env = self.create_envs(n_envs, no_log=False)
+        try:
+            script_files = env.get_attr('script_file', indices=0)[0]
+            if len(script_files) > 0:
+                import shutil
+                for iiii in range(len(script_files)):
+                    if os.path.exists(script_files[iiii]):
+                        shutil.copy(script_files[iiii], self.save_path)
+        except:
+            print("!! Env has no attribute \"script_file\"")
 
         self._hyperparams = self._preprocess_action_noise(hyperparams, saved_hyperparams, env)
 
