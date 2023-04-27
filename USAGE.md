@@ -1,3 +1,7 @@
+# 训练并将环境参数自动上传到wandb
+python train_cmd.py
+
+
 # 训练
 
 python train.py --algo sac --env BounceBall_Pybullet_env-v0 -P
