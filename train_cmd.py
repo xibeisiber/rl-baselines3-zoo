@@ -29,6 +29,7 @@ run_id = get_latest_run_id(logpath, envid) + 1
 envconfig = {
     "00_loc": os.getlogin()+"_"+str(run_id),
     "00_modelname": "air4a",
+    "000_initBallMethod": "toss", # "fall", "toss", "random"
     "act_opt": 2,
     "01_frame_skip": 50,
     "02_robotobs_timelag": 22,
