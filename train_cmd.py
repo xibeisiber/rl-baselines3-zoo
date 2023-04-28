@@ -48,7 +48,7 @@ envconfig = {
     "13_rand_obs_ballpos": 0.01,
     "14_rand_obs_ballvel": 0.1,
     "q_alpha": 0.01,
-    "q_vel_alpha": 0.001,
+    "q_vel_alpha": 0.01,
     "act_alpha": 1,
     "act_acc_alpha": 1
 }
