@@ -29,9 +29,9 @@ run_id = get_latest_run_id(logpath, envid) + 1
 envconfig = {
     "00_loc": os.getlogin()+"_"+str(run_id),
     "00_modelname": "air4a",
-    "000_initBallMethod": "toss", # "fall", "toss", "random"
+    "000_initBallMethod": "fall", # "fall", "toss", "random"
     "act_opt": 2,
-    "01_frame_skip": 50,
+    "01_frame_skip": 20,
     "02_robotobs_timelag": 22,
     "03_ballobs_timelag": 60,
     "04_act_timelag": 50,
@@ -54,6 +54,7 @@ envconfig = {
 }
 
 wandb.init(
+    name = os.getlogin()+"_"+str(run_id),
     # set the wandb project where this run will be logged
     project="bounceball",
 
