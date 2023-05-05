@@ -27,22 +27,21 @@ logpath = os.path.join(os.path.dirname(__file__), "logs/%s"%algo)
 run_id = get_latest_run_id(logpath, envid) + 1 
 
 envconfig = {
-    "00_loc": os.getlogin()+"_"+str(run_id),
-    "00_modelname": "air4a",
+    "00_modelname": "air7l_b",
     "000_initBallMethod": "fall", # "fall", "toss", "random"
     "act_opt": 2,
     "01_frame_skip": 20,
     "02_robotobs_timelag": 22,
     "03_ballobs_timelag": 60,
     "04_act_timelag": 50,
-    "05_obs_stack_n": 20,
+    "05_obs_stack_n": 40,
     "07_rw_coeff_sparse": 1,
     "08_rw_coeff_paddlez": 1,
     "09_rw_coeff_ballvel": 3.5,
     "10_rw_coeff_acc": 0.01,
     "11_rw_coeff_dist": 0.01,
     "12_rw_coeff_baseballdis": 0.005,
-    "rand_ballpos": 0.035,
+    "rand_ballpos": 0.0,
     "rand_force_on_ball": 0.001,
     "rand_bounceforce_on_ball": 0.01,
     "13_rand_obs_ballpos": 0.01,
@@ -53,21 +52,28 @@ envconfig = {
     "act_acc_alpha": 1
 }
 
-wandb.init(
-    name = os.getlogin()+"_"+str(run_id),
-    # set the wandb project where this run will be logged
-    project="bounceball",
+# run = wandb.init(
+#     name = os.getlogin()+"_"+str(run_id),
+#     # set the wandb project where this run will be logged
+#     project="bounceballtest",
 
-    # track hyperparameters and run metadata
-    config=envconfig,
-)
-wandb.finish()
+#     # track hyperparameters and run metadata
+#     config=envconfig,
+#     sync_tensorboard=True,
+# )
+# 
+
+projname = "BounceBallEnv"
+
+runname = os.getlogin()+"_"+str(run_id)
 
 envconfig_str="config:\"%s\""%envconfig
 
-cmd = 'python train.py --algo %s --env %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, envconfig_str)
+cmd = 'python train.py --algo %s --env %s --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
 
 print(">>> Train command:")
 print(cmd)
 
 os.system(cmd)
+
+# run.finish()

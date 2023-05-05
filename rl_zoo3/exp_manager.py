@@ -52,6 +52,7 @@ from rl_zoo3.callbacks import SaveVecNormalizeCallback, TrialEvalCallback
 from rl_zoo3.hyperparams_opt import HYPERPARAMS_SAMPLER
 from rl_zoo3.utils import ALGOS, get_callback_list, get_class_by_name, get_latest_run_id, get_wrapper_class, linear_schedule
 
+from wandb.integration.sb3 import WandbCallback
 
 class ExperimentManager:
     """
@@ -521,6 +522,10 @@ class ExperimentManager:
             )
 
             self.callbacks.append(eval_callback)
+
+        self.callbacks.append(
+            WandbCallback()
+        )
 
     @staticmethod
     def entry_point(env_id: str) -> str:

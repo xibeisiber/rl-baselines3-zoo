@@ -135,9 +135,10 @@ def train() -> None:
     parser.add_argument(
         "--track",
         action="store_true",
-        default=False,
+        default=True,
         help="if toggled, this experiment will be tracked with Weights and Biases",
     )
+    parser.add_argument("--wandb-run-name", type=str, default="run", help="the wandb's run name")
     parser.add_argument("--wandb-project-name", type=str, default="sb3", help="the wandb's project name")
     parser.add_argument("--wandb-entity", type=str, default=None, help="the entity (team) of wandb's project")
     parser.add_argument(
@@ -191,7 +192,6 @@ def train() -> None:
 
     print("=" * 10, env_id, "=" * 10)
     print(f"Seed: {args.seed}")
-
     if args.track:
         try:
             import wandb
@@ -203,14 +203,15 @@ def train() -> None:
         run_name = f"{args.env}__{args.algo}__{args.seed}__{int(time.time())}"
         tags = [*args.wandb_tags, f"v{sb3.__version__}"]
         run = wandb.init(
-            name=run_name,
+            name=args.wandb_run_name,
             project=args.wandb_project_name,
-            entity=args.wandb_entity,
-            tags=tags,
-            config=vars(args),
+            # entity=args.wandb_entity,
+            # tags=tags,
+            # config=vars(args),
+            config=args.env_kwargs["config"],
             sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
-            monitor_gym=True,  # auto-upload the videos of agents playing the game
-            save_code=True,  # optional
+            # monitor_gym=True,  # auto-upload the videos of agents playing the game
+            # save_code=True,  # optional
         )
         args.tensorboard_log = f"runs/{run_name}"
 
@@ -256,11 +257,11 @@ def train() -> None:
     results = exp_manager.setup_experiment()
     if results is not None:
         model, saved_hyperparams = results
-        if args.track:
-            # we need to save the loaded hyperparameters
-            args.saved_hyperparams = saved_hyperparams
-            assert run is not None  # make mypy happy
-            run.config.setdefaults(vars(args))
+        # if args.track:
+        #     # we need to save the loaded hyperparameters
+        #     args.saved_hyperparams = saved_hyperparams
+        #     assert run is not None  # make mypy happy
+        #     run.config.setdefaults(vars(args))
 
         # Normal training
         if model is not None:
