@@ -57,7 +57,7 @@ runname = os.getlogin()+"_"+str(run_id)
 
 envconfig_str="config:\"%s\""%envconfig
 
-cmd = 'python train.py --algo %s --env %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 5000 -P'%(algo, envid, projname, runname, envconfig_str)
+cmd = 'python train.py --algo %s --env %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
 
 print(">>> Train command:")
 print(cmd)
