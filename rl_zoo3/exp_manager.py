@@ -48,7 +48,7 @@ from torch import nn as nn
 
 # Register custom envs
 import rl_zoo3.import_envs  # noqa: F401 pytype: disable=import-error
-from rl_zoo3.callbacks import SaveVecNormalizeCallback, TrialEvalCallback
+from rl_zoo3.callbacks import SaveVecNormalizeCallback, TrialEvalCallback, EvalMultiBestCallback
 from rl_zoo3.hyperparams_opt import HYPERPARAMS_SAMPLER
 from rl_zoo3.utils import ALGOS, get_callback_list, get_class_by_name, get_latest_run_id, get_wrapper_class, linear_schedule
 
@@ -71,6 +71,7 @@ class ExperimentManager:
         tensorboard_log: str = "",
         n_timesteps: int = 0,
         eval_freq: int = 10000,
+        save_model_n: int = 5,
         n_eval_episodes: int = 5,
         save_freq: int = -1,
         hyperparams: Optional[Dict[str, Any]] = None,
@@ -133,6 +134,7 @@ class ExperimentManager:
         self.callbacks: List[BaseCallback] = []
         self.save_freq = save_freq
         self.eval_freq = eval_freq
+        self.save_model_n = save_model_n
         self.n_eval_episodes = n_eval_episodes
         self.n_eval_envs = n_eval_envs
 
@@ -274,7 +276,7 @@ class ExperimentManager:
 
         if self.normalize:
             # Important: save the running average, for testing the agent we need that normalization
-            model.get_vec_normalize_env().save(os.path.join(self.params_path, "vecnormalize.pkl"))
+            model.get_vec_normalize_env().save(os.path.join(self.params_path, "vecnormalize_last.pkl"))
 
     def _save_config(self, saved_hyperparams: Dict[str, Any]) -> None:
         """
@@ -511,7 +513,7 @@ class ExperimentManager:
                 print("Creating test environment")
 
             save_vec_normalize = SaveVecNormalizeCallback(save_freq=1, save_path=self.params_path)
-            eval_callback = EvalCallback(
+            eval_callback = EvalMultiBestCallback(
                 self.create_envs(self.n_eval_envs, eval_env=True),
                 callback_on_new_best=save_vec_normalize,
                 best_model_save_path=self.save_path,
@@ -519,6 +521,8 @@ class ExperimentManager:
                 log_path=self.save_path,
                 eval_freq=self.eval_freq,
                 deterministic=self.deterministic_eval,
+                save_model_n=self.save_model_n,
+                params_path=self.params_path,
             )
 
             self.callbacks.append(eval_callback)
@@ -567,7 +571,7 @@ class ExperimentManager:
         """
         # Pretrained model, load normalization
         path_ = os.path.join(os.path.dirname(self.trained_agent), self.env_name)
-        path_ = os.path.join(path_, "vecnormalize.pkl")
+        path_ = os.path.join(path_, "vecnormalize_last.pkl")
 
         if os.path.exists(path_):
             print("Loading saved VecNormalize stats")

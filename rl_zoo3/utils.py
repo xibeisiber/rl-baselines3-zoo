@@ -198,6 +198,7 @@ def create_test_env(
     should_render: bool = True,
     hyperparams: Optional[Dict[str, Any]] = None,
     env_kwargs: Optional[Dict[str, Any]] = None,
+    pkl_id: int = -1,
 ) -> VecEnv:
     """
     Create environment for testing a trained agent
@@ -279,7 +280,13 @@ def create_test_env(
         if hyperparams["normalize"]:
             print("Loading running average")
             print(f"with params: {hyperparams['normalize_kwargs']}")
-            path_ = os.path.join(stats_path, "vecnormalize.pkl")
+            if pkl_id>0:
+                path_ = os.path.join(stats_path, "vecnormalize%d.pkl"%pkl_id)
+            elif pkl_id==0:
+                path_ = os.path.join(stats_path, "vecnormalize.pkl")
+            else:
+                path_ = os.path.join(stats_path, "vecnormalize_last.pkl")
+            print(">>>>>>>>>>>> loading pkl file: %s"%path_)
             if os.path.exists(path_):
                 env = VecNormalize.load(path_, env)
                 # Deactivate training and reward normalization
@@ -465,6 +472,7 @@ def get_model_path(
     load_best: bool = False,
     load_checkpoint: Optional[str] = None,
     load_last_checkpoint: bool = False,
+    best_n: int = 0,
 ) -> Tuple[str, str, str]:
     if exp_id == 0:
         exp_id = get_latest_run_id(os.path.join(folder, algo), env_name)
@@ -480,7 +488,10 @@ def get_model_path(
     model_name = ModelName(algo, env_name)
 
     if load_best:
-        model_path = os.path.join(log_path, "best_model.zip")
+        if best_n==0:
+            model_path = os.path.join(log_path, "best_model.zip")
+        else:
+            model_path = os.path.join(log_path, "best_model%d.zip"%best_n)
         name_prefix = f"best-model-{model_name}"
     elif load_checkpoint is not None:
         model_path = os.path.join(log_path, f"rl_model_{load_checkpoint}_steps.zip")

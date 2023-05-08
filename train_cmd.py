@@ -1,4 +1,3 @@
-import wandb
 import os
 import json
 import glob
@@ -27,10 +26,10 @@ logpath = os.path.join(os.path.dirname(__file__), "logs/%s"%algo)
 run_id = get_latest_run_id(logpath, envid) + 1 
 
 envconfig = {
-    "00_modelname": "air7l_b",
+    "00_modelname": "air4a", # "air4a", "air7l_b"
     "000_initBallMethod": "fall", # "fall", "toss", "random"
     "act_opt": 2,
-    "01_frame_skip": 20,
+    "01_frame_skip": 50,
     "02_robotobs_timelag": 22,
     "03_ballobs_timelag": 60,
     "04_act_timelag": 50,
@@ -52,28 +51,15 @@ envconfig = {
     "act_acc_alpha": 1
 }
 
-# run = wandb.init(
-#     name = os.getlogin()+"_"+str(run_id),
-#     # set the wandb project where this run will be logged
-#     project="bounceballtest",
-
-#     # track hyperparameters and run metadata
-#     config=envconfig,
-#     sync_tensorboard=True,
-# )
-# 
-
 projname = "BounceBallEnv"
 
 runname = os.getlogin()+"_"+str(run_id)
 
 envconfig_str="config:\"%s\""%envconfig
 
-cmd = 'python train.py --algo %s --env %s --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
+cmd = 'python train.py --algo %s --env %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 5000 -P'%(algo, envid, projname, runname, envconfig_str)
 
 print(">>> Train command:")
 print(cmd)
 
 os.system(cmd)
-
-# run.finish()

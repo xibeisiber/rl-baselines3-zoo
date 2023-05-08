@@ -151,7 +151,12 @@ def train() -> None:
     parser.add_argument(
         "-tags", "--wandb-tags", type=str, default=[], nargs="+", help="Tags for wandb run, e.g.: -tags optimized pr-123"
     )
-
+    parser.add_argument(
+        "--save-model-n",
+        help="the Number of best models to be saved.",
+        default=5,
+        type=int,
+    )
     args = parser.parse_args()
 
     # Going through custom gym packages to let them register in the global registory
@@ -223,6 +228,7 @@ def train() -> None:
         args.tensorboard_log,
         args.n_timesteps,
         args.eval_freq,
+        args.save_model_n,
         args.eval_episodes,
         args.save_freq,
         args.hyperparams,

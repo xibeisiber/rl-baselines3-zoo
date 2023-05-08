@@ -5,7 +5,8 @@ import glob
 
 envid = "BounceBall_Pybullet_env-v0"
 algo = "sac"
-exp_id = 2
+exp_id = 5
+best_n = 1
 
 envconfig_path = os.path.join(os.path.dirname(__file__), "logs/%s/%s_%d/env_config.json"%(algo, envid, exp_id))
 
@@ -21,7 +22,7 @@ print(envconfig)
 envconfig_str="config:\"%s\""%envconfig
 
 # cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --env-kwargs gym_render:True %s '%(algo, envid, exp_id, envconfig_str)
-cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --load-best --env-kwargs gym_render:True %s '%(algo, envid, exp_id, envconfig_str)
+cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --load-best --best-n %d --env-kwargs gym_render:True %s '%(algo, envid, exp_id, best_n, envconfig_str)
 
 print(">>> enjoy command:")
 print(cmd)
