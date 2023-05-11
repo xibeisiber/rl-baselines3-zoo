@@ -278,21 +278,70 @@ NeckEnvRelative-v2:
   sde_sample_freq: 64
   policy_kwargs: "dict(log_std_init=-2, net_arch=[256, 256])"
 
-BounceBall_Pybullet_env-v0: # sac param id 7
-  ## -optimized on 20221014 by liang
-  #  -optimized under new script(20221011)
-  normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 8
-  n_timesteps: !!float 2e7
-  policy: 'MlpPolicy'
-  learning_rate: 0.0004125462714213941
-  buffer_size: 1000000
-  batch_size: 1024
-  ent_coef: 'auto'
-  gamma: 0.995
-  tau: 0.05
-  train_freq: 32
-  gradient_steps: 100
-  learning_starts: 1000
+
+##########
+PickPlace_Mujoco_env-v0:
+  env_wrapper:
+    # - gym.wrappers.time_limit.TimeLimit:
+        # max_episode_steps: 500
+    # - rl_zoo3.wrappers.HistoryWrapper:
+    #     horizon: 5
+  # normalize: "{'norm_obs': True, 'norm_reward': False}"
+  n_timesteps: !!float 1e5
+  policy: 'MultiInputPolicy'
+  learning_rate: lin_7.3e-4
+  buffer_size: 200000 #300000
+  batch_size: 32
+  ent_coef: 'auto'          
+  gamma: 0.99
+  tau: 0.02
+  # train_freq: 64
+  train_freq: [10, "step"]
+  # gradient_steps: -1
+  gradient_steps: 10
+  learning_starts: 500
+  use_sde_at_warmup: True
   use_sde: True
-  policy_kwargs: "dict(log_std_init=-2.2053747659505376, net_arch=[512,512,512],activation_fn=nn.ELU)"
+  sde_sample_freq: 64
+  n_envs: 1
+  policy_kwargs: "dict(log_std_init=-2, net_arch=[256,256])"
+
+BounceBall_Pybullet_env-v0: # sac param id 10
+  ## -optimized on 20230410 by Liang
+  #  -optimized under new script commit 202304
+  #  new SB3
+  env_wrapper:
+  normalize: "{'norm_obs': True, 'norm_reward': False}"
+  n_envs: 10
+  n_timesteps: !!float 2e3
+  policy: 'MlpPolicy'
+  learning_rate: 0.0002747547027232371
+  buffer_size: 100000
+  batch_size: 256
+  ent_coef: 'auto'
+  gamma: 0.99
+  tau: 0.05
+  train_freq: 16
+  gradient_steps: 16
+  learning_starts: 20000
+  use_sde: True
+  policy_kwargs: "dict(log_std_init=-2.4709908582775766, net_arch=[512,512,512],activation_fn=nn.LeakyReLU)" 
+
+# BounceBall_Pybullet_env-v0: # sac param id 7
+#   ## -optimized on 20221014 by liang
+#   #  -optimized under new script(20221011)
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 8
+#   n_timesteps: !!float 2e7
+#   policy: 'MlpPolicy'
+#   learning_rate: 0.0004125462714213941
+#   buffer_size: 1000000
+#   batch_size: 1024
+#   ent_coef: 'auto'
+#   gamma: 0.995
+#   tau: 0.05
+#   train_freq: 32
+#   gradient_steps: 100
+#   learning_starts: 1000
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-2.2053747659505376, net_arch=[512,512,512],activation_fn=nn.ELU)"

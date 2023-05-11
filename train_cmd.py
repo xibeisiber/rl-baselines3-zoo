@@ -25,9 +25,14 @@ algo="sac"
 logpath = os.path.join(os.path.dirname(__file__), "logs/%s"%algo)
 run_id = get_latest_run_id(logpath, envid) + 1 
 
+###############################################  训练时需要调整的参数
+pretrain = True  # 是否需要用预训练的模型
+pretrain_model_id = 25
+model_file = "%s.zip"%envid # "best_model.zip", "%s.zip"%envid
+
 envconfig = {
     "00_modelname": "air4a", # "air4a", "air7l_b"
-    "000_initBallMethod": "fall", # "fall", "toss", "random"
+    "000_initBallMethod": "toss", # "fall", "toss", "random"
     "act_opt": 2,
     "01_frame_skip": 50,
     "02_robotobs_timelag": 22,
@@ -51,13 +56,25 @@ envconfig = {
     "act_acc_alpha": 1
 }
 
+###############################################  end 训练时需要调整的参数
+
+
+pretrain_model_file = os.path.join(os.path.dirname(__file__), "logs/%s"%algo, "%s_%d"%(envid, pretrain_model_id), model_file)
+
 projname = "BounceBallEnv"
 
 runname = os.getlogin()+"_"+str(run_id)
 
 envconfig_str="config:\"%s\""%envconfig
 
-cmd = 'python train.py --algo %s --env %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
+
+if pretrain:
+    print(">>> use pretrained model %s"%pretrain_model_file)
+    if not os.path.exists(pretrain_model_file):
+        raise IOError("Model %s does not exist"%pretrain_model_file)
+    cmd = 'python train.py --algo %s --env %s -i %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, pretrain_model_file, projname, runname, envconfig_str)
+else:
+    cmd = 'python train.py --algo %s --env %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
 
 print(">>> Train command:")
 print(cmd)
