@@ -22,7 +22,7 @@ def enjoy() -> None:  # noqa: C901
     parser.add_argument("--env", help="environment ID", type=EnvironmentName, default="CartPole-v1")
     parser.add_argument("-f", "--folder", help="Log folder", type=str, default="rl-trained-agents")
     parser.add_argument("--algo", help="RL Algorithm", default="ppo", type=str, required=False, choices=list(ALGOS.keys()))
-    parser.add_argument("-n", "--n-timesteps", help="number of timesteps", default=1000, type=int)
+    parser.add_argument("-n", "--n-timesteps", help="number of timesteps", default=50000, type=int)
     parser.add_argument("--num-threads", help="Number of threads for PyTorch (-1 to use default)", default=-1, type=int)
     parser.add_argument("--n-envs", help="number of environments", default=1, type=int)
     parser.add_argument("--exp-id", help="Experiment ID (default: 0: latest, -1: no exp folder)", default=0, type=int)
@@ -268,11 +268,15 @@ def enjoy() -> None:  # noqa: C901
     except KeyboardInterrupt:
         pass
 
+    sum_great = 0
     if args.verbose > 0 and len(successes) > 0:
         print(f"Success rate: {100 * np.mean(successes):.2f}%")
 
     if args.verbose > 0 and len(episode_rewards) > 0:
-        print(f"{len(episode_rewards)} Episodes")
+        for i in range (0,len(episode_rewards)):
+            if episode_lengths[i]>=10000:
+                sum_great = sum_great + 1
+        print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, success rate:{(sum_great/len(episode_rewards)):.2f} ")
         print(f"Mean reward: {np.mean(episode_rewards):.2f} +/- {np.std(episode_rewards):.2f}")
 
     if args.verbose > 0 and len(episode_lengths) > 0:
