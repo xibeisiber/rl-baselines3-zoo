@@ -81,6 +81,7 @@ envconfig = {
     "q_vel_alpha": 0.01,
     "act_alpha": 1,
     "act_acc_alpha": 1,
+    "15_action_noise":0,
     "modelName_prefix":str(modelName_prefix)
 }
 
