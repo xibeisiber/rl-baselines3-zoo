@@ -42,7 +42,7 @@ print (f2.renderText(envid))
 print (f.renderText("\n"))
 
 f3=Figlet(font='standard',width=110)
-print(f3.renderText(str("Model id "+runname) ))
+print(f3.renderText(str("Model ID "+runname) ))
 
 
 
@@ -56,6 +56,7 @@ if pretrain_best_model_flag:
 else:
     model_file = "%s.zip"%envid
 train_step=3e6
+modelName_prefix=os.getlogin()
 envconfig = {
     "00_modelname": "air4a", # "air4a", "air7l_b"
     "000_initBallMethod": "toss", # "fall", "toss", "random"
@@ -79,7 +80,8 @@ envconfig = {
     "q_alpha": 0.01,
     "q_vel_alpha": 0.01,
     "act_alpha": 1,
-    "act_acc_alpha": 1
+    "act_acc_alpha": 1,
+    "modelName_prefix":str(modelName_prefix)
 }
 
 ### End 训练时需要调整的参数

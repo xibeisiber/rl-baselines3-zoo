@@ -7,23 +7,9 @@ from pyfiglet import Figlet
 
 ### 需要手动更改项
 exp_id = 32
-best_n = 0  ###默认设定（一般不变），如需改动需要train中设置存储多个bestmodel
-
-### 打印信息
+best_n = 0  ###默认设定（一般不变）为最优模型，如需改动需要train中设置存储多个bestmodel
 envid = "BounceBall_Pybullet_env-v0"
 algo = "sac"
-f=Figlet(font='starwars',width=150)
-f2=Figlet(font='slant',width=150)
-logo="PeiTian Tech"
-print (f.renderText(logo))
-print (f.renderText("\n"))
-print (f2.renderText(envid))
-print (f.renderText("\n"))
-runname = os.getlogin()+"_"+str(exp_id)
-f3=Figlet(font='standard',width=110)
-print(f3.renderText(str("Model id "+runname) ))
-
-
 envconfig_path = os.path.join(os.path.dirname(__file__), "logs/%s/%s_%d/env_config.json"%(algo, envid, exp_id))
 
 if not os.path.exists(envconfig_path):
@@ -31,6 +17,26 @@ if not os.path.exists(envconfig_path):
 
 with open(envconfig_path) as fr:
     envconfig = json.load(fr)
+    
+
+train_computer_userName=envconfig.get("modelName_prefix",None)
+
+### 打印信息
+
+f=Figlet(font='starwars',width=150)
+f2=Figlet(font='slant',width=150)
+logo="PeiTian Tech"
+print (f.renderText(logo))
+print (f.renderText("\n"))
+print (f2.renderText(envid))
+print (f.renderText("\n"))
+runname = train_computer_userName+"_"+str(exp_id)
+f3=Figlet(font='standard',width=110)
+print(f3.renderText(str("Model ID "+runname) ))
+
+
+
+
 
 print(">>> env_config:")
 print(envconfig)
