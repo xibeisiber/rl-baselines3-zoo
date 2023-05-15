@@ -34,6 +34,7 @@ setup(
         "rich",
         "optuna",
         "pyyaml>=5.1",
+        "pyfiglet",
         "pytablewriter~=0.64",
         # TODO: add test dependencies
     ],

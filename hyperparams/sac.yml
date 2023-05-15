@@ -312,8 +312,8 @@ BounceBall_Pybullet_env-v0: # sac param id 10
   #  new SB3
   env_wrapper:
   normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 10
-  n_timesteps: !!float 2e3
+  n_envs: 13
+  n_timesteps: !!float 2e6
   policy: 'MlpPolicy'
   learning_rate: 0.0002747547027232371
   buffer_size: 100000

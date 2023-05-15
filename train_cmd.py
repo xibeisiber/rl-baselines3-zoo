@@ -1,7 +1,7 @@
 import os
 import json
 import glob
-
+from pyfiglet import Figlet
 def get_latest_run_id(log_path: str, env_name: str) -> int:
     """
     Returns the latest run number for the given log name and log path,
@@ -20,30 +20,50 @@ def get_latest_run_id(log_path: str, env_name: str) -> int:
     return max_run_id
 
 envid = "BounceBall_Pybullet_env-v0"
-
 algo="sac"
+
+
+
+
 
 logpath = os.path.join(os.path.dirname(__file__), "logs/%s"%algo)
 run_id = get_latest_run_id(logpath, envid) + 1 
+projname = "BounceBallEnv"
+runname = os.getlogin()+"_"+str(run_id)
 
-###############################################  训练时需要调整的参数
+### 打印信息
+
+f=Figlet(font='starwars',width=150)
+f2=Figlet(font='slant',width=150)
+logo="PeiTian Tech"
+print (f.renderText(logo))
+print (f.renderText("\n"))
+print (f2.renderText(envid))
+print (f.renderText("\n"))
+
+f3=Figlet(font='standard',width=110)
+print(f3.renderText(str("Model id "+runname) ))
+
+
+
+### 训练时需要调整的参数
 pretrain = True  # 是否需要用预训练的模型
-pretrain_model_id = 28
+pretrain_model_id = 32
 pretrain_best_model_id = "best_model"   ###选择加载哪个bestmodel- 20230512脚本默认改为训练只有一个最佳model
 pretrain_best_model_flag = True     ###True则加载最佳模型，False加载最后模型
 if pretrain_best_model_flag:
     model_file = "%s.zip"%pretrain_best_model_id
 else:
     model_file = "%s.zip"%envid
-
+train_step=3e6
 envconfig = {
     "00_modelname": "air4a", # "air4a", "air7l_b"
     "000_initBallMethod": "toss", # "fall", "toss", "random"
     "act_opt": 2,
     "01_frame_skip": 80,
-    "02_robotobs_timelag": 22,
+    "02_robotobs_timelag": 80,
     "03_ballobs_timelag": 114,
-    "04_act_timelag": 50,
+    "04_act_timelag": 144,
     "05_obs_stack_n": 20,
     "07_rw_coeff_sparse": 1,
     "08_rw_coeff_paddlez": 1,
@@ -54,7 +74,7 @@ envconfig = {
     "rand_ballpos": 0.05,
     "rand_force_on_ball": 0.001,
     "rand_bounceforce_on_ball": 0.01,
-    "13_rand_obs_ballpos": 0.01,
+    "13_rand_obs_ballpos": 0.015,
     "14_rand_obs_ballvel": 0.1,
     "q_alpha": 0.01,
     "q_vel_alpha": 0.01,
@@ -62,15 +82,10 @@ envconfig = {
     "act_acc_alpha": 1
 }
 
-###############################################  end 训练时需要调整的参数
+### End 训练时需要调整的参数
 
 
 pretrain_model_file = os.path.join(os.path.dirname(__file__), "logs/%s"%algo, "%s_%d"%(envid, pretrain_model_id), model_file)
-
-projname = "BounceBallEnv"
-
-runname = os.getlogin()+"_"+str(run_id)
-
 envconfig_str="config:\"%s\""%envconfig
 
 
@@ -78,9 +93,9 @@ if pretrain:
     print(">>> use pretrained model %s"%pretrain_model_file)
     if not os.path.exists(pretrain_model_file):
         raise IOError("Model %s does not exist"%pretrain_model_file)
-    cmd = 'python train.py --algo %s --env %s -i %s --save-model-n 5 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, pretrain_model_file, projname, runname, envconfig_str)
+    cmd = 'python train.py --algo %s --env %s -i %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, pretrain_model_file, projname, runname, envconfig_str,train_step)
 else:
-    cmd = 'python train.py --algo %s --env %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str)
+    cmd = 'python train.py --algo %s --env %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 5 --eval-freq 50000 -P'%(algo, envid, projname, runname, envconfig_str,train_step)
 
 print(">>> Train command:")
 print(cmd)
