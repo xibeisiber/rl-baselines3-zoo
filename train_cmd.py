@@ -20,7 +20,7 @@ def get_latest_run_id(log_path: str, env_name: str) -> int:
     return max_run_id
 
 envid = "BounceBall_Pybullet_env-v0"
-algo="sac"
+algo="ppo"
 
 
 
@@ -29,7 +29,7 @@ algo="sac"
 logpath = os.path.join(os.path.dirname(__file__), "logs/%s"%algo)
 run_id = get_latest_run_id(logpath, envid) + 1 
 projname = "BounceBallEnv"
-runname = os.getlogin()+"_"+str(run_id)
+runname = os.getlogin()+"_"+algo+"_"+str(run_id)
 
 ### 打印信息
 
@@ -47,16 +47,16 @@ print(f3.renderText(str("Model ID "+runname) ))
 
 
 ### 训练时需要调整的参数
-pretrain = True  # 是否需要用预训练的模型
+pretrain = False  # 是否需要用预训练的模型
 pretrain_model_id = 32
 pretrain_best_model_id = "best_model"   ###选择加载哪个bestmodel- 20230512脚本默认改为训练只有一个最佳model
-pretrain_best_model_flag = True     ###True则加载最佳模型，False加载最后模型
+pretrain_best_model_flag = False     ###True则加载最佳模型，False加载最后模型
 if pretrain_best_model_flag:
     model_file = "%s.zip"%pretrain_best_model_id
 else:
     model_file = "%s.zip"%envid
 train_step=3e6
-modelName_prefix=os.getlogin()
+modelName_prefix=runname
 envconfig = {
     "00_modelname": "air4a", # "air4a", "air7l_b"
     "000_initBallMethod": "toss", # "fall", "toss", "random"

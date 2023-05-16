@@ -6,7 +6,7 @@ from pyfiglet import Figlet
 
 
 ### 需要手动更改项
-exp_id = 32
+exp_id = 33
 best_n = 0  ###默认设定（一般不变）为最优模型，如需改动需要train中设置存储多个bestmodel
 envid = "BounceBall_Pybullet_env-v0"
 algo = "sac"
@@ -30,7 +30,7 @@ print (f.renderText(logo))
 print (f.renderText("\n"))
 print (f2.renderText(envid))
 print (f.renderText("\n"))
-runname = train_computer_userName+"_"+str(exp_id)
+runname = train_computer_userName
 f3=Figlet(font='standard',width=110)
 print(f3.renderText(str("Model ID "+runname) ))
 
@@ -44,7 +44,7 @@ print(envconfig)
 envconfig_str="config:\"%s\""%envconfig
 
 # cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --env-kwargs gym_render:True %s '%(algo, envid, exp_id, envconfig_str)
-cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --load-best --best-n %d --env-kwargs gym_render:False %s '%(algo, envid, exp_id, best_n, envconfig_str)
+cmd = 'python enjoy.py --algo %s --env %s -f logs/ --exp-id %d --load-best --best-n %d --env-kwargs gym_render:True %s '%(algo, envid, exp_id, best_n, envconfig_str)
 
 print(">>> enjoy command:")
 print(cmd)
