@@ -2,6 +2,7 @@ import os
 import json
 import glob
 from pyfiglet import Figlet
+from termcolor import colored
 def get_latest_run_id(log_path: str, env_name: str) -> int:
     """
     Returns the latest run number for the given log name and log path,
@@ -32,18 +33,16 @@ projname = "BounceBallEnv"
 runname = os.getlogin()+"_"+algo+"_"+str(run_id)
 
 ### 打印信息
-
 f=Figlet(font='starwars',width=150)
 f2=Figlet(font='slant',width=150)
 logo="PeiTian Tech"
-print (f.renderText(logo))
 print (f.renderText("\n"))
-print (f2.renderText(envid))
+print (colored(f.renderText(logo)),"light_green")
 print (f.renderText("\n"))
-
+print (colored(f2.renderText(envid)),"light_green")
+print (f.renderText("\n"))
 f3=Figlet(font='standard',width=110)
-print(f3.renderText(str("Model ID "+runname) ))
-
+print(colored(f3.renderText(str("Model ID "+runname) ),"light_yellow"))
 
 hyper_opt=True
 
@@ -66,7 +65,7 @@ envconfig = {
     "02_robotobs_timelag": 40,
     "03_ballobs_timelag": 114,
     "04_act_timelag": 144,  
-    "05_obs_stack_n": 5,
+    "05_obs_stack_n": 15,
     "07_rw_coeff_sparse": 1,
     "08_rw_coeff_paddlez": 1,
     "09_rw_coeff_ballvel": 3.5,

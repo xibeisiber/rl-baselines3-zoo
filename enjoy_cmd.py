@@ -3,10 +3,10 @@ import os
 import json
 import glob
 from pyfiglet import Figlet
-
+from termcolor import colored
 
 ### 需要手动更改项
-exp_id = 33
+exp_id = 51
 best_n = 0  ###默认设定（一般不变）为最优模型，如需改动需要train中设置存储多个bestmodel
 envid = "BounceBall_Pybullet_env-v0"
 algo = "sac"
@@ -26,13 +26,14 @@ train_computer_userName=envconfig.get("modelName_prefix",None)
 f=Figlet(font='starwars',width=150)
 f2=Figlet(font='slant',width=150)
 logo="PeiTian Tech"
-print (f.renderText(logo))
 print (f.renderText("\n"))
-print (f2.renderText(envid))
+print (colored(f.renderText(logo)),"light_green")
+print (f.renderText("\n"))
+print (colored(f2.renderText(envid)),"light_green")
 print (f.renderText("\n"))
 runname = train_computer_userName
 f3=Figlet(font='standard',width=110)
-print(f3.renderText(str("Model ID "+runname) ))
+print(colored(f3.renderText(str("Model ID "+runname) ),"light_yellow"))
 
 
 
