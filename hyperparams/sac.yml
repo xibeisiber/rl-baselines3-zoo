@@ -346,47 +346,68 @@ PickPlace_Mujoco_env-v0:
 #   use_sde: True
 #   policy_kwargs: "dict(log_std_init=-2.2053747659505376, net_arch=[512,512,512],activation_fn=nn.ELU)"
 
-BounceBall_Pybullet_env-v0: # sac param id 11
-  ## -optimized on 20230520 by Liang (only 48 trials Error arised)
-  #  -optimized under new script commit 20230518
+# BounceBall_Pybullet_env-v0: # sac param id 11
+#   ## -optimized on 20230520 by Liang (only 48 trials Error arised)
+#   #  -optimized under new script commit 20230518
+#   #  customized SB3
+#   env_wrapper:
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 32
+#   n_timesteps: !!float 2e6
+#   policy: 'MlpPolicy'
+#   learning_rate: 0.0028075066011334087
+#   buffer_size: 1000000
+#   batch_size: 2048
+#   ent_coef: "auto"
+#   gamma: 0.95
+#   tau: 0.05
+#   train_freq: 32
+#   gradient_steps: 32
+#   learning_starts: 0
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-1.6268271419961549, net_arch=[512,512,512],activation_fn=nn.ReLU)" 
+
+
+
+
+# BounceBall_Pybullet_env-v0: # sac param id 12
+#   ## -optimized on 20230525 by Liang (100 trials)
+#   #  -optimized under new script commit 20230518
+#   #  customized SB3
+#   env_wrapper:
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 32
+#   n_timesteps: !!float 2e6
+#   policy: 'MlpPolicy'
+#   learning_rate: 0.002553722858820919
+#   buffer_size: 10000
+#   batch_size: 2048
+#   ent_coef: "auto"
+#   gamma: 0.995
+#   tau: 0.08
+#   train_freq: 16
+#   gradient_steps: 16
+#   learning_starts: 20000
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-2.4728811115171934, net_arch=[512,512,512],activation_fn=nn.ReLU)" 
+
+BounceBall_Pybullet_env-v0: # sac param id 13
+  ## -optimized on 20230603 by Liang (100 trials)
+  #  -optimized under new script commit 20230601
   #  customized SB3
   env_wrapper:
   normalize: "{'norm_obs': True, 'norm_reward': False}"
   n_envs: 32
   n_timesteps: !!float 2e6
   policy: 'MlpPolicy'
-  learning_rate: 0.0028075066011334087
-  buffer_size: 1000000
-  batch_size: 2048
-  ent_coef: "auto"
   gamma: 0.95
-  tau: 0.05
-  train_freq: 32
-  gradient_steps: 32
-  learning_starts: 0
-  use_sde: True
-  policy_kwargs: "dict(log_std_init=-1.6268271419961549, net_arch=[512,512,512],activation_fn=nn.ReLU)" 
-
-
-
-
-BounceBall_Pybullet_env-v0: # sac param id 12
-  ## -optimized on 20230525 by Liang (100 trials)
-  #  -optimized under new script commit 20230518
-  #  customized SB3
-  env_wrapper:
-  normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 32
-  n_timesteps: !!float 2e6
-  policy: 'MlpPolicy'
-  learning_rate: 0.002553722858820919
+  learning_rate: 0.003960218399173225
+  batch_size: 1024
   buffer_size: 10000
-  batch_size: 2048
-  ent_coef: "auto"
-  gamma: 0.995
-  tau: 0.08
-  train_freq: 16
-  gradient_steps: 16
-  learning_starts: 20000
+  learning_starts: 0
+  train_freq: 8
+  gradient_steps: 8
+  tau: 0.005
+  ent_coef: 0.1
   use_sde: True
-  policy_kwargs: "dict(log_std_init=-2.4728811115171934, net_arch=[512,512,512],activation_fn=nn.ReLU)" 
+  policy_kwargs: "dict(log_std_init=-0.07006611221943632, net_arch=[512,512,512],activation_fn=nn.ELU)" 
