@@ -44,7 +44,7 @@ print (f.renderText("\n"))
 f3=Figlet(font='standard',width=110)
 print(colored(f3.renderText(str("Model ID "+runname) ),"light_yellow"))
 
-hyper_opt=True
+hyper_opt=False
 
 ### 训练时需要调整的参数
 pretrain = False  # 是否需要用预训练的模型
@@ -64,7 +64,7 @@ envconfig = {
     "01_frame_skip": 40,
     "02_robotobs_timelag": 40,
     "03_ballobs_timelag": 114,
-    "04_act_timelag": 144,  
+    "04_act_timelag": 50,  
     "05_obs_stack_n": 15,
     "07_rw_coeff_sparse": 1,
     "08_rw_coeff_paddlez": 1,
@@ -75,14 +75,14 @@ envconfig = {
     "rand_ballpos": 0.05,
     "rand_force_on_ball": 0.001,
     "rand_bounceforce_on_ball": 0.01,
-    "13_rand_obs_ballpos": 0.01,
+    "13_rand_obs_ballpos": 0.015,
     "14_rand_obs_ballvel": 0.1,
     "q_alpha": 0.01,
     "q_vel_alpha": 0.01,
     "act_alpha": 1,
     "act_acc_alpha": 1,
-    "15_action_noise":0,
-    "modelName_prefix":str(modelName_prefix)
+    "modelName_prefix":str(modelName_prefix),
+    "15_action_noise":0.00025
 }
 
 ### End 训练时需要调整的参数
@@ -94,15 +94,15 @@ envconfig_str="config:\"%s\""%envconfig
  
 if hyper_opt:
     print(">>> Hyperparameters tuning")
-    cmd='python train.py --algo %s --env %s -n 50000 -optimize --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-trials 100 --n-jobs 1 --sampler tpe --pruner median --n-evaluations 10000 --n-eval-envs 32  --verbose 0 --vec-env subproc -P'%(algo, envid, projname, runname, envconfig_str)
+    cmd='python train.py --algo %s --env %s -n 50000 -optimize --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-trials 100 --n-jobs 1 --sampler tpe --pruner median --n-evaluations 10000 --n-eval-envs 4  --verbose 0 --vec-env subproc -P'%(algo, envid, projname, runname, envconfig_str)
 else:
     if pretrain:
         print(">>> use pretrained model %s"%pretrain_model_file)
         if not os.path.exists(pretrain_model_file):
             raise IOError("Model %s does not exist"%pretrain_model_file)
-        cmd = 'python train.py --algo %s --env %s -i %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 32 --eval-freq 70000 -P'%(algo, envid, pretrain_model_file, projname, runname, envconfig_str,train_step)
+        cmd = 'python train.py --algo %s --env %s -i %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 4 --eval-freq 70000 -P'%(algo, envid, pretrain_model_file, projname, runname, envconfig_str,train_step)
     else:
-        cmd = 'python train.py --algo %s --env %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 32 --eval-freq 70000 -P'%(algo, envid, projname, runname, envconfig_str,train_step)
+        cmd = 'python train.py --algo %s --env %s --save-model-n 1 --wandb-project-name %s --wandb-run-name %s --env-kwargs %s --n-timesteps %d --vec-env subproc --n-eval-envs 4 --eval-freq 70000 -P'%(algo, envid, projname, runname, envconfig_str,train_step)
 
 print(">>> Train command:")
 print(cmd)
