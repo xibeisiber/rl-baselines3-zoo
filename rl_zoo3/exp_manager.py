@@ -571,7 +571,7 @@ class ExperimentManager:
         """
         # Pretrained model, load normalization
         path_ = os.path.join(os.path.dirname(self.trained_agent), self.env_name)
-        path_ = os.path.join(path_, "vecnormalize_last.pkl")
+        path_ = os.path.join(path_, "vecnormalize.pkl")
 
         if os.path.exists(path_):
             print("Loading saved VecNormalize stats")
