@@ -352,7 +352,7 @@ BounceBall_Pybullet_env-v0: # sac param id 11
   #  customized SB3
   env_wrapper:
   normalize: "{'norm_obs': True, 'norm_reward': False}"
-  n_envs: 16
+  n_envs: 32
   n_timesteps: !!float 2e6
   policy: 'MlpPolicy'
   learning_rate: lin_0.0028075066011334087
@@ -365,7 +365,7 @@ BounceBall_Pybullet_env-v0: # sac param id 11
   gradient_steps: 32
   learning_starts: 0
   use_sde: True
-  policy_kwargs: "dict(log_std_init=-1.6268271419961549, net_arch=[512,512,512,512],activation_fn=nn.ReLU)" 
+  policy_kwargs: "dict(log_std_init=-2.237973995189017, net_arch=[512,512,512,512],activation_fn=nn.ReLU)" 
 
 
 
@@ -411,3 +411,49 @@ BounceBall_Pybullet_env-v0: # sac param id 11
 #   ent_coef: 0.1
 #   use_sde: True
 #   policy_kwargs: "dict(log_std_init=-0.07006611221943632, net_arch=[512,512,512],activation_fn=nn.ELU)" 
+
+
+# BounceBall_Pybullet_env-v0: # sac param id 14
+#   ## -optimized on 20230628 by Liang manually
+#   #  -adjusted id 11 LR->smaller, buffer->1.5M
+#   #  customized SB3
+#   env_wrapper:
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 32
+#   n_timesteps: !!float 2e6
+#   policy: 'MlpPolicy'
+#   learning_rate: lin_0.0010075066011334087
+#   buffer_size: 1500000
+#   batch_size: 2048
+#   ent_coef: "auto"
+#   gamma: 0.95
+#   tau: 0.05
+#   train_freq: 32
+#   gradient_steps: 32
+#   learning_starts: 0
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-2.237973995189017, net_arch=[512,512,512,512],activation_fn=nn.ReLU)" 
+
+
+
+
+# BounceBall_Pybullet_env-v0: # sac param id 15
+#   ## -optimized on 20230628 by Liang 
+#   #  customized SB3
+#   env_wrapper:
+#   normalize: "{'norm_obs': True, 'norm_reward': False}"
+#   n_envs: 32
+#   n_timesteps: !!float 2e6
+#   policy: 'MlpPolicy'
+#   learning_rate: lin_0.000037361402394317754
+#   buffer_size: 1000000
+#   batch_size: 512
+#   ent_coef: "auto"
+#   gamma: 0.99
+#   tau: 0.05
+#   train_freq: 32
+#   gradient_steps: 32
+#   learning_starts: 0
+#   use_sde: True
+#   policy_kwargs: "dict(log_std_init=-2.237973995189017, net_arch=[512,512,512,512],activation_fn=nn.ReLU)" 
+
