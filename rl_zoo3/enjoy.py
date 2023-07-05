@@ -76,6 +76,8 @@ def enjoy() -> None:  # noqa: C901
         default=False,
         help="if toggled, display a progress bar using tqdm and rich",
     )
+
+    parser.add_argument("--task", help="the 000_initBallMethod", type=str, default="fall")
     args = parser.parse_args()
 
     # Going through custom gym packages to let them register in the global registory
@@ -266,24 +268,38 @@ def enjoy() -> None:  # noqa: C901
                 if done and infos[0].get("is_success") is not None:
                     if args.verbose > 1:
                         print("Success?", infos[0].get("is_success", False))
-
                     if infos[0].get("is_success") is not None:
                         successes.append(infos[0].get("is_success", False))
+
                         episode_reward, ep_len = 0.0, 0
 
     except KeyboardInterrupt:
         pass
 
     sum_great = 0
-    if args.verbose > 0 and len(successes) > 0:
-        print(f"Success rate: {100 * np.mean(successes):.2f}%")
 
-    if args.verbose > 0 and len(episode_rewards) > 0:
-        for i in range (0,len(episode_rewards)):
-            if episode_lengths[i]>=10000:
-                sum_great = sum_great + 1
-        print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, success rate:{(sum_great/len(episode_rewards)):.2f} ")
-        print(f"Mean reward: {np.mean(episode_rewards):.2f} +/- {np.std(episode_rewards):.2f}")
+    if args.task=="toss1back":
+        if args.verbose > 0 and len(successes) > 0:
+            for i in range (0,len(successes)):
+                if successes[i]:
+                    sum_great = sum_great + 1
+            print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, success rate:{(sum_great/len(episode_rewards)):.2f} ")
+            print(f"Mean reward: {np.mean(episode_rewards):.2f} +/- {np.std(episode_rewards):.2f}")
+
+
+    else:
+        # if args.verbose > 0 and len(successes) > 0:
+        #     print(f"Success rate: {100 * np.mean(successes):.2f}%")
+
+        if args.verbose > 0 and len(episode_rewards) > 0:
+            for i in range (0,len(episode_rewards)):
+                if episode_lengths[i]>=10000:
+                    sum_great = sum_great + 1
+            print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, success rate:{(sum_great/len(episode_rewards)):.2f} ")
+            print(f"Mean reward: {np.mean(episode_rewards):.2f} +/- {np.std(episode_rewards):.2f}")
+
+
+
 
     if args.verbose > 0 and len(episode_lengths) > 0:
         print(f"Mean episode length: {np.mean(episode_lengths):.2f} +/- {np.std(episode_lengths):.2f}")
