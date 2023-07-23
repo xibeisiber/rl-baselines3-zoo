@@ -277,8 +277,9 @@ def enjoy() -> None:  # noqa: C901
         pass
 
     sum_great = 0
-
-    if args.task=="toss1back":
+    episode_great_bar=1000
+    if args.task == ("toss1back") or ("fallback"):
+       
         if args.verbose > 0 and len(successes) > 0:
             for i in range (0,len(successes)):
                 if successes[i]:
@@ -293,12 +294,12 @@ def enjoy() -> None:  # noqa: C901
 
         if args.verbose > 0 and len(episode_rewards) > 0:
             for i in range (0,len(episode_rewards)):
-                if episode_lengths[i]>=10000:
+                if episode_lengths[i]>=episode_great_bar:
                     sum_great = sum_great + 1
-            print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, success rate:{(sum_great/len(episode_rewards)):.2f} ")
+            print(f"total {len(episode_rewards)} Episodes , {sum_great} Episodes is great, can reasch over {episode_great_bar},success rate:{(sum_great/len(episode_rewards)):.2f} ")
             print(f"Mean reward: {np.mean(episode_rewards):.2f} +/- {np.std(episode_rewards):.2f}")
 
-
+    print("-------------{}---------------".format(args.task))       
 
 
     if args.verbose > 0 and len(episode_lengths) > 0:
